@@ -1,5 +1,5 @@
 {
-  "name": "auth-editor",
+  "name": "@powerhousedao/auth-editor",
   "description": "Simple editor tool that allows an admin to check and modify permissions for a given reactor",
   "version": "1.0.0",
   "license": "AGPL-3.0-only",

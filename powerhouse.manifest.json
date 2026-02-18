@@ -22,6 +22,12 @@
         }
     ],
     "apps": [],
-    "subgraphs": [],
+    "subgraphs": [
+        {
+            "id": "whoami",
+            "name": "Whoami Subgraph",
+            "documentTypes": []
+        }
+    ],
     "importScripts": []
 }
