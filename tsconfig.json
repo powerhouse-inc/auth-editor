@@ -35,7 +35,10 @@
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@powerhousedao/auth-editor/document-models/auth-dashboard": ["./document-models/auth-dashboard/index.ts"]
+    }
   },
   "include": ["**/*", "./powerhouse.manifest.json"],
   "exclude": ["dist", "node_modules", ".ph"]

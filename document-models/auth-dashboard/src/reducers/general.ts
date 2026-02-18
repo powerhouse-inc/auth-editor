@@ -1,4 +1,4 @@
-import type { AuthDashboardGeneralOperations } from "@powerhousedao/auth-editor/document-models/auth-dashboard";
+import type { AuthDashboardGeneralOperations } from "../../gen/index.js";
 
 export const authDashboardGeneralOperations: AuthDashboardGeneralOperations = {
   setSwitchboardUrlOperation(state, action) {

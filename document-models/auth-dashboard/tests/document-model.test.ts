@@ -17,7 +17,7 @@ import {
   assertIsAuthDashboardDocument,
   isAuthDashboardState,
   assertIsAuthDashboardState,
-} from "@powerhousedao/auth-editor/document-models/auth-dashboard";
+} from "../index.js";
 import { ZodError } from "zod";
 
 describe("AuthDashboard Document Model", () => {
@@ -39,9 +39,9 @@ describe("AuthDashboard Document Model", () => {
     const wrongDocumentType = utils.createDocument();
     wrongDocumentType.header.documentType = "the-wrong-thing-1234";
     expect(isAuthDashboardDocument(wrongDocumentType)).toBe(false);
-    expect(() =>
-      assertIsAuthDashboardDocument(wrongDocumentType),
-    ).toThrow(ZodError);
+    expect(() => assertIsAuthDashboardDocument(wrongDocumentType)).toThrow(
+      ZodError,
+    );
   });
 
   it("should reject a document with invalid global state", () => {
@@ -50,13 +50,11 @@ describe("AuthDashboard Document Model", () => {
     // @ts-expect-error - we are testing the error case
     wrongState.state.global = { switchboardUrl: 123 };
     expect(isAuthDashboardState(wrongState.state)).toBe(false);
-    expect(() =>
-      assertIsAuthDashboardState(wrongState.state),
-    ).toThrow(ZodError);
+    expect(() => assertIsAuthDashboardState(wrongState.state)).toThrow(
+      ZodError,
+    );
     expect(isAuthDashboardDocument(wrongState)).toBe(false);
-    expect(() =>
-      assertIsAuthDashboardDocument(wrongState),
-    ).toThrow(ZodError);
+    expect(() => assertIsAuthDashboardDocument(wrongState)).toThrow(ZodError);
   });
 
   it("should reject a document with invalid initialState", () => {
@@ -67,13 +65,13 @@ describe("AuthDashboard Document Model", () => {
     // @ts-expect-error - we are testing the error case
     wrongInitialState.state.global = invalidGlobal;
     expect(isAuthDashboardState(wrongInitialState.state)).toBe(false);
-    expect(() =>
-      assertIsAuthDashboardState(wrongInitialState.state),
-    ).toThrow(ZodError);
+    expect(() => assertIsAuthDashboardState(wrongInitialState.state)).toThrow(
+      ZodError,
+    );
     expect(isAuthDashboardDocument(wrongInitialState)).toBe(false);
-    expect(() =>
-      assertIsAuthDashboardDocument(wrongInitialState),
-    ).toThrow(ZodError);
+    expect(() => assertIsAuthDashboardDocument(wrongInitialState)).toThrow(
+      ZodError,
+    );
   });
 
   it("should reject a document with missing header id", () => {
@@ -81,9 +79,9 @@ describe("AuthDashboard Document Model", () => {
     // @ts-expect-error - we are testing the error case
     delete missingIdInHeader.header.id;
     expect(isAuthDashboardDocument(missingIdInHeader)).toBe(false);
-    expect(() =>
-      assertIsAuthDashboardDocument(missingIdInHeader),
-    ).toThrow(ZodError);
+    expect(() => assertIsAuthDashboardDocument(missingIdInHeader)).toThrow(
+      ZodError,
+    );
   });
 
   it("should reject a document with missing header name", () => {
@@ -91,9 +89,9 @@ describe("AuthDashboard Document Model", () => {
     // @ts-expect-error - we are testing the error case
     delete missingNameInHeader.header.name;
     expect(isAuthDashboardDocument(missingNameInHeader)).toBe(false);
-    expect(() =>
-      assertIsAuthDashboardDocument(missingNameInHeader),
-    ).toThrow(ZodError);
+    expect(() => assertIsAuthDashboardDocument(missingNameInHeader)).toThrow(
+      ZodError,
+    );
   });
 
   it("should reject a document with missing header createdAtUtcIso", () => {

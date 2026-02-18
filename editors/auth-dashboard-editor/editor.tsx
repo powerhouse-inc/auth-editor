@@ -6,7 +6,7 @@ import {
 import {
   useSelectedAuthDashboardDocument,
   setSwitchboardUrl,
-} from "@powerhousedao/auth-editor/document-models/auth-dashboard";
+} from "../../document-models/auth-dashboard/index.js";
 import { useAuthApi } from "./hooks/useAuthApi.js";
 import { SwitchboardForm } from "./components/SwitchboardForm.js";
 import { Dashboard } from "./components/Dashboard.js";
