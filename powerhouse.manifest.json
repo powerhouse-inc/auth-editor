@@ -6,8 +6,21 @@
         "name": "",
         "url": ""
     },
-    "documentModels": [],
-    "editors": [],
+    "documentModels": [
+        {
+            "id": "powerhouse/auth-dashboard",
+            "name": "AuthDashboard"
+        }
+    ],
+    "editors": [
+        {
+            "id": "auth-dashboard-editor",
+            "name": "AuthDashboardEditor",
+            "documentTypes": [
+                "powerhouse/auth-dashboard"
+            ]
+        }
+    ],
     "apps": [],
     "subgraphs": [],
     "importScripts": []

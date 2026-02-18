@@ -6,3 +6,6 @@ node_modules
 
 .ph
 projects-import.js
+.keypair.json
+.auth.json
+.env

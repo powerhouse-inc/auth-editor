@@ -1,12 +1,15 @@
 {
   "name": "auth-editor",
-  "description": "",
+  "description": "Simple editor tool that allows an admin to check and modify permissions for a given reactor",
   "version": "1.0.0",
   "license": "AGPL-3.0-only",
   "type": "module",
   "files": [
     "/dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

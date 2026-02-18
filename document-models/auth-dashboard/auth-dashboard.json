@@ -1,0 +1,48 @@
+{
+  "author": {
+    "name": "Powerhouse",
+    "website": "https://www.powerhouse.inc/"
+  },
+  "description": "Stores the switchboard API endpoint URL for an authorization permissions dashboard",
+  "extension": "phad",
+  "id": "powerhouse/auth-dashboard",
+  "name": "AuthDashboard",
+  "specifications": [
+    {
+      "changeLog": [],
+      "modules": [
+        {
+          "description": "General operations for the auth dashboard",
+          "id": "general-module-1",
+          "name": "general",
+          "operations": [
+            {
+              "description": "Sets the switchboard API endpoint URL",
+              "errors": [],
+              "examples": [],
+              "id": "set-switchboard-url-op-1",
+              "name": "SET_SWITCHBOARD_URL",
+              "reducer": "state.switchboardUrl = action.input.url;",
+              "schema": "input SetSwitchboardUrlInput {\n    url: String!\n}",
+              "scope": "global",
+              "template": "Sets the switchboard API endpoint URL"
+            }
+          ]
+        }
+      ],
+      "state": {
+        "global": {
+          "examples": [],
+          "initialValue": "{\n    \"switchboardUrl\": \"\"\n}",
+          "schema": "type AuthDashboardState {\n    switchboardUrl: String\n}"
+        },
+        "local": {
+          "examples": [],
+          "initialValue": "",
+          "schema": ""
+        }
+      },
+      "version": 1
+    }
+  ]
+}
