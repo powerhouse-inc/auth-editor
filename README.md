@@ -1,6 +1,6 @@
 # Document Model Boilerplate
 
-This Document Model Boilerplate provides code generation for scaffolding editors and models. 
+This Document Model Boilerplate provides code generation for scaffolding editors and models.  
 It ensures compatibility with host applications like Connect and the Reactors for seamless document model and editor integration.
 
 ## Standard Document Model Workflow with help of the boilerplate.
