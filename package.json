@@ -3,6 +3,10 @@
   "description": "Simple editor tool that allows an admin to check and modify permissions for a given reactor",
   "version": "1.0.0",
   "license": "AGPL-3.0-only",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/powerhouse-inc/auth-editor"
+  },
   "type": "module",
   "files": [
     "/dist"
@@ -106,10 +110,39 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2",
     "vite": "^6.2.3",
-    "vitest": "^3.0.9"
+    "vitest": "^3.0.9",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "semantic-release": "^25.0.2"
   },
   "peerDependencies": {
     "react": "^19.2.0",
     "react-dom": "^19.2.0"
+  },
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "staging",
+        "prerelease": "staging"
+      },
+      {
+        "name": "dev",
+        "prerelease": "dev"
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      "@semantic-release/github",
+      "@semantic-release/git"
+    ]
   }
 }
