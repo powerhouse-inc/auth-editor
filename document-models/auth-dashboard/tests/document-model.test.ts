@@ -38,84 +38,83 @@ describe("AuthDashboard Document Model", () => {
   it("should reject a document that is not a AuthDashboard document", () => {
     const wrongDocumentType = utils.createDocument();
     wrongDocumentType.header.documentType = "the-wrong-thing-1234";
-    try {
-      expect(assertIsAuthDashboardDocument(wrongDocumentType)).toThrow();
-      expect(isAuthDashboardDocument(wrongDocumentType)).toBe(false);
-    } catch (error) {
-      expect(error).toBeInstanceOf(ZodError);
-    }
+    expect(isAuthDashboardDocument(wrongDocumentType)).toBe(false);
+    expect(() =>
+      assertIsAuthDashboardDocument(wrongDocumentType),
+    ).toThrow(ZodError);
   });
-  const wrongState = utils.createDocument();
-  // @ts-expect-error - we are testing the error case
-  wrongState.state.global = {
-    ...{ notWhat: "you want" },
-  };
-  try {
+
+  it("should reject a document with invalid global state", () => {
+    const wrongState = utils.createDocument();
+    // switchboardUrl must be string | null | undefined, not number
+    // @ts-expect-error - we are testing the error case
+    wrongState.state.global = { switchboardUrl: 123 };
     expect(isAuthDashboardState(wrongState.state)).toBe(false);
-    expect(assertIsAuthDashboardState(wrongState.state)).toThrow();
+    expect(() =>
+      assertIsAuthDashboardState(wrongState.state),
+    ).toThrow(ZodError);
     expect(isAuthDashboardDocument(wrongState)).toBe(false);
-    expect(assertIsAuthDashboardDocument(wrongState)).toThrow();
-  } catch (error) {
-    expect(error).toBeInstanceOf(ZodError);
-  }
+    expect(() =>
+      assertIsAuthDashboardDocument(wrongState),
+    ).toThrow(ZodError);
+  });
 
-  const wrongInitialState = utils.createDocument();
-  // @ts-expect-error - we are testing the error case
-  wrongInitialState.initialState.global = {
-    ...{ notWhat: "you want" },
-  };
-  try {
+  it("should reject a document with invalid initialState", () => {
+    const wrongInitialState = utils.createDocument();
+    const invalidGlobal = { switchboardUrl: 123 };
+    // @ts-expect-error - we are testing the error case
+    wrongInitialState.initialState.global = invalidGlobal;
+    // @ts-expect-error - we are testing the error case
+    wrongInitialState.state.global = invalidGlobal;
     expect(isAuthDashboardState(wrongInitialState.state)).toBe(false);
-    expect(assertIsAuthDashboardState(wrongInitialState.state)).toThrow();
+    expect(() =>
+      assertIsAuthDashboardState(wrongInitialState.state),
+    ).toThrow(ZodError);
     expect(isAuthDashboardDocument(wrongInitialState)).toBe(false);
-    expect(assertIsAuthDashboardDocument(wrongInitialState)).toThrow();
-  } catch (error) {
-    expect(error).toBeInstanceOf(ZodError);
-  }
+    expect(() =>
+      assertIsAuthDashboardDocument(wrongInitialState),
+    ).toThrow(ZodError);
+  });
 
-  const missingIdInHeader = utils.createDocument();
-  // @ts-expect-error - we are testing the error case
-  delete missingIdInHeader.header.id;
-  try {
+  it("should reject a document with missing header id", () => {
+    const missingIdInHeader = utils.createDocument();
+    // @ts-expect-error - we are testing the error case
+    delete missingIdInHeader.header.id;
     expect(isAuthDashboardDocument(missingIdInHeader)).toBe(false);
-    expect(assertIsAuthDashboardDocument(missingIdInHeader)).toThrow();
-  } catch (error) {
-    expect(error).toBeInstanceOf(ZodError);
-  }
+    expect(() =>
+      assertIsAuthDashboardDocument(missingIdInHeader),
+    ).toThrow(ZodError);
+  });
 
-  const missingNameInHeader = utils.createDocument();
-  // @ts-expect-error - we are testing the error case
-  delete missingNameInHeader.header.name;
-  try {
+  it("should reject a document with missing header name", () => {
+    const missingNameInHeader = utils.createDocument();
+    // @ts-expect-error - we are testing the error case
+    delete missingNameInHeader.header.name;
     expect(isAuthDashboardDocument(missingNameInHeader)).toBe(false);
-    expect(assertIsAuthDashboardDocument(missingNameInHeader)).toThrow();
-  } catch (error) {
-    expect(error).toBeInstanceOf(ZodError);
-  }
+    expect(() =>
+      assertIsAuthDashboardDocument(missingNameInHeader),
+    ).toThrow(ZodError);
+  });
 
-  const missingCreatedAtUtcIsoInHeader = utils.createDocument();
-  // @ts-expect-error - we are testing the error case
-  delete missingCreatedAtUtcIsoInHeader.header.createdAtUtcIso;
-  try {
+  it("should reject a document with missing header createdAtUtcIso", () => {
+    const missingCreatedAtUtcIsoInHeader = utils.createDocument();
+    // @ts-expect-error - we are testing the error case
+    delete missingCreatedAtUtcIsoInHeader.header.createdAtUtcIso;
     expect(isAuthDashboardDocument(missingCreatedAtUtcIsoInHeader)).toBe(false);
-    expect(
+    expect(() =>
       assertIsAuthDashboardDocument(missingCreatedAtUtcIsoInHeader),
-    ).toThrow();
-  } catch (error) {
-    expect(error).toBeInstanceOf(ZodError);
-  }
+    ).toThrow(ZodError);
+  });
 
-  const missingLastModifiedAtUtcIsoInHeader = utils.createDocument();
-  // @ts-expect-error - we are testing the error case
-  delete missingLastModifiedAtUtcIsoInHeader.header.lastModifiedAtUtcIso;
-  try {
+  it("should reject a document with missing header lastModifiedAtUtcIso", () => {
+    const missingLastModifiedAtUtcIsoInHeader = utils.createDocument();
+    // @ts-expect-error - we are testing the error case
+    delete missingLastModifiedAtUtcIsoInHeader.header.lastModifiedAtUtcIso;
     expect(isAuthDashboardDocument(missingLastModifiedAtUtcIsoInHeader)).toBe(
       false,
     );
-    expect(
+    expect(() =>
       assertIsAuthDashboardDocument(missingLastModifiedAtUtcIsoInHeader),
-    ).toThrow();
-  } catch (error) {
-    expect(error).toBeInstanceOf(ZodError);
-  }
+    ).toThrow(ZodError);
+  });
 });
