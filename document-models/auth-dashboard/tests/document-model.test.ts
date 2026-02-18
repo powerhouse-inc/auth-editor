@@ -17,7 +17,7 @@ import {
   assertIsAuthDashboardDocument,
   isAuthDashboardState,
   assertIsAuthDashboardState,
-} from "auth-editor/document-models/auth-dashboard";
+} from "@powerhousedao/auth-editor/document-models/auth-dashboard";
 import { ZodError } from "zod";
 
 describe("AuthDashboard Document Model", () => {

@@ -8,7 +8,7 @@ import {
 import type {
   AuthDashboardAction,
   AuthDashboardDocument,
-} from "auth-editor/document-models/auth-dashboard";
+} from "@powerhousedao/auth-editor/document-models/auth-dashboard";
 import {
   assertIsAuthDashboardDocument,
   isAuthDashboardDocument,

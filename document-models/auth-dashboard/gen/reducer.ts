@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import type { StateReducer } from "document-model";
 import { isDocumentAction, createReducer } from "document-model/core";
-import type { AuthDashboardPHState } from "auth-editor/document-models/auth-dashboard";
+import type { AuthDashboardPHState } from "@powerhousedao/auth-editor/document-models/auth-dashboard";
 
 import { authDashboardGeneralOperations } from "../src/reducers/general.js";
 

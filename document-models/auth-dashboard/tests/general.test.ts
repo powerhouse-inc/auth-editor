@@ -6,7 +6,7 @@ import {
   isAuthDashboardDocument,
   setSwitchboardUrl,
   SetSwitchboardUrlInputSchema,
-} from "auth-editor/document-models/auth-dashboard";
+} from "@powerhousedao/auth-editor/document-models/auth-dashboard";
 
 describe("GeneralOperations", () => {
   it("should handle setSwitchboardUrl operation", () => {
