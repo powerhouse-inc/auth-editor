@@ -3,146 +3,112 @@
   "description": "Simple editor tool that allows an admin to check and modify permissions for a given reactor",
   "version": "1.0.1",
   "license": "AGPL-3.0-only",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/powerhouse-inc/auth-editor"
-  },
   "type": "module",
   "files": [
     "/dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
+  "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/types/index.d.ts",
+      "browser": "./dist/browser/index.js",
+      "node": "./dist/node/index.mjs"
     },
     "./document-models": {
-      "types": "./dist/document-models/index.d.ts",
-      "import": "./dist/document-models/index.js"
-    },
-    "./editors": {
-      "types": "./dist/editors/index.d.ts",
-      "import": "./dist/editors/index.js"
+      "types": "./dist/types/document-models/index.d.ts",
+      "browser": "./dist/browser/document-models/index.js",
+      "node": "./dist/node/document-models/index.mjs"
     },
     "./document-models/*": {
-      "types": "./dist/document-models/*/index.d.ts",
-      "import": "./dist/document-models/*/index.js"
+      "types": "./dist/types/document-models/*/index.d.ts",
+      "browser": "./dist/browser/document-models/*/index.js",
+      "node": "./dist/node/document-models/*/index.mjs"
+    },
+    "./editors": {
+      "types": "./dist/types/editors/index.d.ts",
+      "browser": "./dist/browser/editors/index.js",
+      "node": "./dist/node/editors/index.mjs"
     },
     "./editors/*": {
-      "types": "./dist/editors/*/index.d.ts",
-      "import": "./dist/editors/*/index.js"
+      "types": "./dist/types/editors/*/editor.d.ts",
+      "browser": "./dist/browser/editors/*/editor.js",
+      "node": "./dist/node/editors/*/editor.mjs"
     },
     "./subgraphs": {
-      "types": "./dist/subgraphs/index.d.ts",
-      "import": "./dist/subgraphs/index.js"
+      "types": "./dist/types/subgraphs/index.d.ts",
+      "browser": "./dist/browser/subgraphs/index.js",
+      "node": "./dist/node/subgraphs/index.mjs"
     },
     "./processors": {
-      "types": "./dist/processors/index.d.ts",
-      "import": "./dist/processors/index.js"
+      "types": "./dist/types/processors/index.d.ts",
+      "browser": "./dist/browser/processors/index.js",
+      "node": "./dist/node/processors/index.mjs"
     },
     "./manifest": "./dist/powerhouse.manifest.json",
     "./style.css": "./dist/style.css"
   },
   "scripts": {
-    "build": "npm run tsc && npm run tailwind",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint --config eslint.config.js --cache --cache-strategy content",
     "lint:fix": "npm run lint -- --fix",
     "tsc": "tsc",
     "tsc:watch": "tsc --watch",
-    "tailwind": "npx @tailwindcss/cli -i ./style.css -o ./dist/style.css",
-    "prepublishOnly": "npm run build",
     "check-circular-imports": "npx dpdm -T ./index.ts",
     "generate": "ph-cli generate",
     "connect": "ph-cli connect",
+    "build": "ph-cli build",
     "reactor": "ph-cli reactor",
     "service": "ph-cli service",
     "vetra": "ph-cli vetra",
     "service-startup": "bash ./node_modules/@powerhousedao/ph-cli/dist/scripts/service-startup.sh",
     "service-unstartup": "bash ./node_modules/@powerhousedao/ph-cli/dist/scripts/service-unstartup.sh"
   },
-  "dependencies": {
-    "@powerhousedao/builder-tools": "^5.3.3",
-    "@powerhousedao/common": "^5.3.3",
-    "@powerhousedao/design-system": "^5.3.3",
-    "@powerhousedao/document-engineering": "1.40.1",
-    "@powerhousedao/vetra": "^5.3.3",
-    "document-model": "^5.3.3",
-    "error": "^10.4.0",
-    "graphql": "^16.10.0",
-    "graphql-tag": "^2.12.6",
-    "zod": "^4.1.13"
+  "peerDependencies": {
+    "@powerhousedao/reactor-browser": "6.0.0",
+    "document-model": "6.0.0",
+    "graphql": "^16",
+    "graphql-tag": "^2",
+    "react": "^19",
+    "react-dom": "^19",
+    "zod": "^4"
   },
   "devDependencies": {
-    "@electric-sql/pglite": "^0.2.12",
+    "@electric-sql/pglite": "0.3.15",
+    "@electric-sql/pglite-tools": "0.2.20",
     "@eslint/js": "^9.38.0",
-    "@powerhousedao/analytics-engine-core": "^0.5.0",
-    "@powerhousedao/codegen": "^5.3.3",
-    "@powerhousedao/config": "^5.3.3",
-    "@powerhousedao/ph-cli": "^5.3.3",
-    "@powerhousedao/reactor-api": "^5.3.3",
-    "@powerhousedao/reactor-browser": "^5.3.3",
-    "@powerhousedao/reactor-local": "^5.3.3",
-    "@powerhousedao/switchboard": "^5.3.3",
-    "@powerhousedao/connect": "^5.3.3",
-    "@tailwindcss/cli": "^4.1.4",
-    "@testing-library/react": "^16.3.0",
+    "@powerhousedao/connect": "6.0.0",
+    "@powerhousedao/design-system": "6.0.0",
+    "@powerhousedao/document-engineering": "1.40.5",
+    "@powerhousedao/ph-cli": "6.0.0",
+    "@powerhousedao/reactor": "6.0.0",
+    "@powerhousedao/reactor-browser": "6.0.0",
+    "@powerhousedao/shared": "6.0.0",
+    "@tailwindcss/cli": "^4.1.18",
+    "@tailwindcss/vite": "^4.1.18",
     "@types/node": "^24.9.2",
-    "@types/react": "^19.2.2",
-    "@vitejs/plugin-react": "^5.1.0",
-    "document-drive": "^5.3.3",
+    "@types/react": "^19.2.3",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "@vitest/coverage-v8": "4.1.1",
+    "document-model": "6.0.0",
     "eslint": "^9.38.0",
-    "vite-plugin-node-polyfills": "^0.24.0",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "globals": "^16.4.0",
-    "package-manager-detector": "^0.2.8",
-    "pm2": "^5.4.3",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "graphql": "16.12.0",
+    "graphql-tag": "2.12.6",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
     "tailwindcss": "^4.1.16",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.2",
-    "vite": "^6.2.3",
-    "vitest": "^3.0.9",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "semantic-release": "^25.0.2"
-  },
-  "peerDependencies": {
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0"
-  },
-  "release": {
-    "branches": [
-      "main",
-      {
-        "name": "staging",
-        "prerelease": "staging"
-      },
-      {
-        "name": "dev",
-        "prerelease": "dev"
-      }
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/changelog",
-      [
-        "@semantic-release/npm",
-        {
-          "npmPublish": false
-        }
-      ],
-      "@semantic-release/github",
-      "@semantic-release/git"
-    ]
+    "vite": "^8.0.8",
+    "vite-tsconfig-paths": "6.1.1",
+    "vitest": "4.1.1",
+    "zod": "4.3.6"
   }
 }

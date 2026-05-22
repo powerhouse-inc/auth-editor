@@ -35,6 +35,11 @@ export interface OperationPermissions {
   }[];
 }
 
+export interface DocumentProtection {
+  protected: boolean;
+  ownerAddress: string | null;
+}
+
 interface Props {
   access: DocumentAccess;
   availableGroups: AvailableGroup[];
@@ -49,6 +54,9 @@ interface Props {
   onRevokeOpUser?: (operationType: string, address: string) => void;
   onGrantOpGroup?: (operationType: string, groupId: number) => void;
   onRevokeOpGroup?: (operationType: string, groupId: number) => void;
+  protection?: DocumentProtection | null;
+  onSetProtection?: (next: boolean) => void;
+  onTransferOwnership?: (newOwnerAddress: string) => void;
 }
 
 const PERMISSION_COLORS: Record<PermissionLevel, string> = {
@@ -445,6 +453,9 @@ export function PermissionPanel({
   onRevokeOpUser,
   onGrantOpGroup,
   onRevokeOpGroup,
+  protection,
+  onSetProtection,
+  onTransferOwnership,
 }: Props) {
   const [showGrantUser, setShowGrantUser] = useState(false);
   const [grantAddress, setGrantAddress] = useState("");
@@ -453,6 +464,16 @@ export function PermissionPanel({
   const [grantGroupId, setGrantGroupId] = useState<number | null>(null);
   const [grantGroupLevel, setGrantGroupLevel] =
     useState<PermissionLevel>("READ");
+  const [showTransfer, setShowTransfer] = useState(false);
+  const [transferAddress, setTransferAddress] = useState("");
+
+  const handleTransfer = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!transferAddress.trim() || !onTransferOwnership) return;
+    onTransferOwnership(transferAddress.trim());
+    setTransferAddress("");
+    setShowTransfer(false);
+  };
 
   const handleGrantUser = (e: React.FormEvent) => {
     e.preventDefault();
@@ -505,6 +526,157 @@ export function PermissionPanel({
           </span>
         )}
       </div>
+
+      {/* v6: Protection & Ownership */}
+      {protection && (
+        <div
+          style={{
+            padding: "12px 14px",
+            backgroundColor: protection.protected ? "#fef2f2" : "#f0fdf4",
+            border: `1px solid ${protection.protected ? "#fecaca" : "#bbf7d0"}`,
+            borderRadius: "6px",
+            marginBottom: "16px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "8px",
+              flexWrap: "wrap",
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  color: "#1a1a2e",
+                  marginBottom: "2px",
+                }}
+              >
+                Protection:{" "}
+                <span
+                  style={{
+                    color: protection.protected ? "#b91c1c" : "#15803d",
+                  }}
+                >
+                  {protection.protected ? "Protected" : "Open"}
+                </span>
+              </div>
+              <p style={{ fontSize: "11px", color: "#6b7280", margin: 0 }}>
+                {protection.protected
+                  ? "Only granted users, group members, the owner, or ADMINS can access."
+                  : "Any authenticated user can read & write. Anonymous reads allowed."}
+              </p>
+            </div>
+            {onSetProtection && (
+              <button
+                onClick={() => onSetProtection(!protection.protected)}
+                style={{
+                  padding: "4px 10px",
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  color: "#fff",
+                  backgroundColor: protection.protected ? "#15803d" : "#b91c1c",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+              >
+                {protection.protected ? "Unprotect" : "Protect"}
+              </button>
+            )}
+          </div>
+
+          <div
+            style={{
+              marginTop: "10px",
+              paddingTop: "8px",
+              borderTop: "1px dashed rgba(0,0,0,0.08)",
+              fontSize: "11px",
+              color: "#374151",
+            }}
+          >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                gap: "8px",
+                flexWrap: "wrap",
+              }}
+            >
+              <div>
+                Owner:{" "}
+                {protection.ownerAddress ? (
+                  <span style={{ fontFamily: "monospace" }}>
+                    <EnsAddress address={protection.ownerAddress} />
+                  </span>
+                ) : (
+                  <span style={{ color: "#9ca3af" }}>none</span>
+                )}{" "}
+                <span style={{ color: "#9ca3af" }}>(implicit ADMIN in v6)</span>
+              </div>
+              {onTransferOwnership && (
+                <button
+                  onClick={() => setShowTransfer(!showTransfer)}
+                  style={{
+                    padding: "2px 8px",
+                    fontSize: "10px",
+                    fontWeight: 500,
+                    color: "#4f46e5",
+                    backgroundColor: "#fff",
+                    border: "1px solid #c7d2fe",
+                    borderRadius: "3px",
+                    cursor: "pointer",
+                  }}
+                >
+                  {showTransfer ? "Cancel" : "Transfer ownership"}
+                </button>
+              )}
+            </div>
+
+            {showTransfer && onTransferOwnership && (
+              <form
+                onSubmit={handleTransfer}
+                style={{ display: "flex", gap: "4px", marginTop: "6px" }}
+              >
+                <input
+                  type="text"
+                  value={transferAddress}
+                  onChange={(e) => setTransferAddress(e.target.value)}
+                  placeholder="0x... new owner"
+                  style={{
+                    flex: 1,
+                    padding: "4px 8px",
+                    fontSize: "11px",
+                    fontFamily: "monospace",
+                    border: "1px solid #d1d5db",
+                    borderRadius: "3px",
+                  }}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    padding: "4px 10px",
+                    fontSize: "10px",
+                    fontWeight: 500,
+                    color: "#fff",
+                    backgroundColor: "#4f46e5",
+                    border: "none",
+                    borderRadius: "3px",
+                    cursor: "pointer",
+                  }}
+                >
+                  Transfer
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* User Permissions */}
       <div style={{ marginBottom: "16px" }}>

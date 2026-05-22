@@ -1,1 +1,4 @@
-export * as WhoamiSubgraph from "./whoami/index.js";
+/**
+ * WARNING: DO NOT EDIT
+ * This file is auto-generated and updated by codegen
+ */

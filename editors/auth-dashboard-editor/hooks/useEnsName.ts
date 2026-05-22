@@ -1,22 +1,29 @@
 import { useEffect, useState } from "react";
-import { createPublicClient, http } from "viem";
-import { mainnet } from "viem/chains";
-
-const client = createPublicClient({
-  chain: mainnet,
-  transport: http("https://eth.llamarpc.com"),
-});
 
 const cache = new Map<string, string | null>();
 
+interface EnsIdeasResponse {
+  name?: string | null;
+}
+
+/**
+ * Resolves an Ethereum address to its ENS name via a public REST gateway.
+ * Falls back to null on any error so callers can fall back to the raw address.
+ */
 async function resolveEns(address: string): Promise<string | null> {
   const lower = address.toLowerCase();
   if (cache.has(lower)) return cache.get(lower) ?? null;
 
   try {
-    const name = await client.getEnsName({
-      address: address as `0x${string}`,
-    });
+    const res = await fetch(
+      `https://api.ensideas.com/ens/resolve/${encodeURIComponent(address)}`,
+    );
+    if (!res.ok) {
+      cache.set(lower, null);
+      return null;
+    }
+    const data = (await res.json()) as EnsIdeasResponse;
+    const name = data.name ?? null;
     cache.set(lower, name);
     return name;
   } catch {

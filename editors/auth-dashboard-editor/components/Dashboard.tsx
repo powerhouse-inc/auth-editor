@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import { GroupsTab } from "./GroupsTab.js";
 import { PermissionsTab } from "./PermissionsTab.js";
 import { MyPermissionsTab } from "./MyPermissionsTab.js";
@@ -6,14 +6,10 @@ import { useEnsName, formatAddress } from "../hooks/useEnsName.js";
 
 type Tab = "groups" | "permissions" | "my-permissions";
 
-const ADMIN_TABS: { id: Tab; label: string }[] = [
+const TABS: { id: Tab; label: string }[] = [
+  { id: "my-permissions", label: "My Permissions" },
   { id: "groups", label: "Groups" },
   { id: "permissions", label: "Document Permissions" },
-  { id: "my-permissions", label: "My Permissions" },
-];
-
-const NON_ADMIN_TABS: { id: Tab; label: string }[] = [
-  { id: "my-permissions", label: "My Permissions" },
 ];
 
 interface Props {
@@ -23,15 +19,6 @@ interface Props {
   onDisconnect: () => void;
 }
 
-const WHOAMI_QUERY = `query WhoAmI($address: String!) {
-  whoami(address: $address) {
-    address
-    isAdmin
-    isUser
-    isGuest
-  }
-}`;
-
 export function Dashboard({
   switchboardUrl,
   query,
@@ -39,40 +26,7 @@ export function Dashboard({
   onDisconnect,
 }: Props) {
   const [activeTab, setActiveTab] = useState<Tab>("my-permissions");
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null); // null = checking
   const ensName = useEnsName(userAddress);
-
-  const checkAdmin = useCallback(async () => {
-    try {
-      const data = await query<{
-        whoami: {
-          address: string;
-          isAdmin: boolean;
-          isUser: boolean;
-          isGuest: boolean;
-        };
-      }>(WHOAMI_QUERY, { address: userAddress });
-      const admin = data.whoami.isAdmin;
-      setIsAdmin(admin);
-      if (admin) setActiveTab("groups");
-    } catch {
-      setIsAdmin(false);
-    }
-  }, [query, userAddress]);
-
-  useEffect(() => {
-    void checkAdmin();
-  }, [checkAdmin]);
-
-  const tabs = isAdmin ? ADMIN_TABS : NON_ADMIN_TABS;
-
-  if (isAdmin === null) {
-    return (
-      <p style={{ color: "#6b7280", padding: "24px" }}>
-        Checking permissions...
-      </p>
-    );
-  }
 
   return (
     <div>
@@ -135,6 +89,27 @@ export function Dashboard({
         </button>
       </div>
 
+      {/* v6 model note — three-tier global roles are gone */}
+      <div
+        style={{
+          padding: "10px 14px",
+          backgroundColor: "#eef2ff",
+          border: "1px solid #c7d2fe",
+          borderRadius: "6px",
+          marginBottom: "16px",
+          fontSize: "12px",
+          color: "#4338ca",
+          lineHeight: 1.5,
+        }}
+      >
+        Powerhouse v6 has no global <code>ADMIN</code> / <code>USER</code> /{" "}
+        <code>GUEST</code> tiers. Access is controlled by per-document
+        protection &amp; grants, with the reactor&apos;s <code>ADMINS</code> env
+        list as the only supreme override. Admin-only actions below will fail
+        with a permission error if your wallet isn&apos;t in <code>ADMINS</code>{" "}
+        or hasn&apos;t been granted that document <code>ADMIN</code>.
+      </div>
+
       {/* Tabs */}
       <div
         style={{
@@ -144,7 +119,7 @@ export function Dashboard({
           borderBottom: "2px solid #e5e7eb",
         }}
       >
-        {tabs.map((tab) => (
+        {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
@@ -169,16 +144,10 @@ export function Dashboard({
       </div>
 
       {/* Tab Content */}
-      {activeTab === "groups" && isAdmin && <GroupsTab query={query} />}
-      {activeTab === "permissions" && isAdmin && (
-        <PermissionsTab query={query} />
-      )}
+      {activeTab === "groups" && <GroupsTab query={query} />}
+      {activeTab === "permissions" && <PermissionsTab query={query} />}
       {activeTab === "my-permissions" && (
-        <MyPermissionsTab
-          query={query}
-          userAddress={userAddress}
-          isAdmin={!!isAdmin}
-        />
+        <MyPermissionsTab query={query} userAddress={userAddress} />
       )}
     </div>
   );

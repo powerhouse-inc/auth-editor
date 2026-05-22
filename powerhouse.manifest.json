@@ -1,33 +1,28 @@
 {
+  "name": "auth-demo",
+  "description": "",
+  "category": "",
+  "publisher": {
     "name": "",
-    "description": "",
-    "category": "",
-    "publisher": {
-        "name": "",
-        "url": ""
-    },
-    "documentModels": [
-        {
-            "id": "powerhouse/auth-dashboard",
-            "name": "AuthDashboard"
-        }
-    ],
-    "editors": [
-        {
-            "id": "auth-dashboard-editor",
-            "name": "AuthDashboardEditor",
-            "documentTypes": [
-                "powerhouse/auth-dashboard"
-            ]
-        }
-    ],
-    "apps": [],
-    "subgraphs": [
-        {
-            "id": "whoami",
-            "name": "Whoami Subgraph",
-            "documentTypes": []
-        }
-    ],
-    "importScripts": []
+    "url": ""
+  },
+  "documentModels": [
+    {
+      "id": "powerhouse/auth-dashboard",
+      "name": "AuthDashboard"
+    }
+  ],
+  "apps": [],
+  "editors": [
+    {
+      "name": "auth-dashboard-editor",
+      "id": "auth-dashboard-editor",
+      "documentTypes": [
+        "powerhouse/auth-dashboard"
+      ]
+    }
+  ],
+  "processors": [],
+  "subgraphs": [],
+  "config": []
 }

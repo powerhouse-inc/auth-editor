@@ -1,16 +1,19 @@
 import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react";
-import packageJson from "./package.json" with { type: "json" };
-import { join } from "node:path";
+import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   test: {
     globals: true,
-  },
-  plugins: [react()],
-  resolve: {
-    alias: {
-      [packageJson.name]: join(import.meta.dirname),
+    coverage: {
+      provider: "v8",
+      include: ["document-models/**/src/reducers/**"],
+      thresholds: {
+        lines: 95,
+        branches: 95,
+        functions: 95,
+        statements: 95,
+      },
     },
   },
+  plugins: [tsconfigPaths()],
 });

@@ -1,8 +1,5 @@
 import { useCallback } from "react";
-import {
-  useConnectCrypto,
-  useUser,
-} from "@powerhousedao/reactor-browser/connect";
+import { useRenown, useUser } from "@powerhousedao/reactor-browser";
 
 interface GraphQLResponse<T> {
   data?: T;
@@ -13,11 +10,11 @@ interface GraphQLResponse<T> {
  * Hook for making authenticated GraphQL requests to the switchboard.
  *
  * Auth tokens are obtained automatically from Connect's Renown login
- * via useConnectCrypto().getBearerToken(). In production, Connect and
- * the reactor share the same origin so CORS is not an issue.
+ * via useRenown().getBearerToken(). In production, Connect and the
+ * reactor share the same origin so CORS is not an issue.
  */
 export function useAuthApi(switchboardUrl: string | null | undefined) {
-  const crypto = useConnectCrypto();
+  const renown = useRenown();
   const user = useUser();
 
   const query = useCallback(
@@ -28,19 +25,17 @@ export function useAuthApi(switchboardUrl: string | null | undefined) {
         "Content-Type": "application/json",
       };
 
-      // Get a fresh bearer token from Connect's crypto (Renown login).
-      // Token is generated per-request with a short expiry, matching
-      // how Connect's GqlRequestChannel authenticates.
-      if (crypto && user?.address) {
+      if (renown && user?.address) {
         try {
-          const token = await crypto.getBearerToken(
-            switchboardUrl,
-            user.address,
-            false,
-            { expiresIn: 600 },
-          );
+          // Mint a bearer WITHOUT `aud`. The switchboard's JWT verifier
+          // (did-jwt) rejects any token that has an `aud` claim unless the
+          // server has an app address configured — which Vetra's local
+          // switchboard does not. Connect itself mints aud-less tokens for
+          // the local reactor for the same reason.
+          // See: packages/renown/src/utils.ts (verifyAuthBearerToken docstring)
+          const token = await renown.getBearerToken({ expiresIn: 600 });
           if (token) {
-            headers["Authorization"] = `Bearer ${token}`;
+            headers.Authorization = `Bearer ${token}`;
           }
         } catch {
           // Token generation failed - proceed without auth
@@ -67,7 +62,7 @@ export function useAuthApi(switchboardUrl: string | null | undefined) {
       }
       return json.data;
     },
-    [switchboardUrl, crypto, user?.address],
+    [switchboardUrl, renown, user?.address],
   );
 
   return { query, isReady: !!switchboardUrl };

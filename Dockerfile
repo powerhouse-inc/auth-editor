@@ -10,7 +10,7 @@
 # -----------------------------------------------------------------------------
 # Base stage: Common setup for building
 # -----------------------------------------------------------------------------
-FROM node:22-alpine AS base
+FROM node:24-alpine AS base
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN apk add --no-cache python3 make g++ git bash \
 
 # Setup pnpm
 ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+ENV PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Configure JSR registry
@@ -100,7 +100,7 @@ ENTRYPOINT ["/docker-entrypoint.sh"]
 # -----------------------------------------------------------------------------
 # Switchboard final stage - node runtime
 # -----------------------------------------------------------------------------
-FROM node:22-alpine AS switchboard
+FROM node:24-alpine AS switchboard
 
 WORKDIR /app
 
@@ -109,7 +109,7 @@ RUN apk add --no-cache curl openssl
 
 # Setup pnpm
 ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
+ENV PATH="$PNPM_HOME/bin:$PNPM_HOME:$PATH"
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
 # Configure JSR registry
